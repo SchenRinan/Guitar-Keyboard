@@ -1,22 +1,20 @@
 //initial values
-let keys=[];
-let test = 'Numpad1';
 var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext("2d");
 ctx.font = "25px Arial";
 ctx.textAlign = "center";
 let animation;
 let frames = 0;
+let keys=[];
+let tempoOnscreen = [];
 
 //Create canvas
 function drawCanvas(){
-    console.log(frames)
-
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     //highlight numberpads
     if(keys['Numpad3']){
         ctx.beginPath();
-        ctx.fillStyle = "skyblue";
+        ctx.fillStyle = "pink";
         ctx.rect(0, 575, 100, 25);
         ctx.fill();}
     if(keys['Numpad2']){
@@ -26,22 +24,22 @@ function drawCanvas(){
         ctx.fill();}
     if(keys['Numpad1']){
         ctx.beginPath();
-        ctx.fillStyle = "skyblue";
+        ctx.fillStyle = "chartreuse";
         ctx.rect(200, 575, 100, 25);
         ctx.fill();}
     if(keys['Numpad6']){
         ctx.beginPath();
-        ctx.fillStyle = "skyblue";
+        ctx.fillStyle = "yellow";
         ctx.rect(0, 550, 100, 25);
         ctx.fill();}
     if(keys['Numpad5']){
         ctx.beginPath();
-        ctx.fillStyle = "skyblue";
+        ctx.fillStyle = "blueviolet";
         ctx.rect(100, 550, 100, 25);
         ctx.fill();}  
     if(keys['Numpad4']){
         ctx.beginPath();
-        ctx.fillStyle = "skyblue";
+        ctx.fillStyle = "orange";
         ctx.rect(200, 550, 100, 25);
         ctx.fill();}  
     
@@ -82,52 +80,40 @@ function drawCanvas(){
     ctx.beginPath();
     ctx.rect(200, 550, 100, 25);
     ctx.stroke();
-    ctx.fillStyle = "green";
+    ctx.fillStyle = "purple";
     ctx.beginPath();
     ctx.rect(0, 515, 300, 35);
     ctx.fill();
 
 
-    ctx.beginPath();
-    ctx.moveTo(0, frames);
-    ctx.lineTo(300, frames);
-    ctx.stroke();
     //Running Background on game field
     if(frames % 120 === 0){
-
+        tempoOnscreen.push(new TempoLines)
     }
-
+    for(i=0; i<tempoOnscreen.length; i++){
+        tempoOnscreen[i].draw();
+        tempoOnscreen[i].update();
+    }
+    if(tempoOnscreen[0].y > 515){tempoOnscreen.shift()}
     frames++;
 }
 
 
-//create listener that detects keys press combination
-document.addEventListener ("keydown", (event) => {
-    keys = (keys || []);
-        keys[event.code]=true;
-    
-    if(keys['Space']){
-        console.log(keys)
-//put a function that will check if key combination is the same as the one on place
+
+
+
+
+class TempoLines{
+    constructor(){
+        this.y = 0
     }
-    if(keys['Numpad3']){
+    draw(){
         ctx.beginPath();
-        ctx.rect(0, 575, 100, 25);
-        ctx.fill();
+        ctx.moveTo(0, this.y);
+        ctx.lineTo(300, this.y);
+        ctx.stroke();
     }
-}, false);
-
-document.addEventListener("keyup", function (e) {
-    keys[e.code]=false;
-    stop();
-}, false);
-
-
-
-//game function
-function game(){
-    drawCanvas();
-    animation = requestAnimationFrame(game)
+    update(){
+        this.y++;
+    }
 }
-
-game();
